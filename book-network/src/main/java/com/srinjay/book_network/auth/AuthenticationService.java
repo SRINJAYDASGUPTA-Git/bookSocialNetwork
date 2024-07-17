@@ -40,7 +40,7 @@ public class AuthenticationService {
 
     public void regiter(RegistrationRequest request) throws MessagingException {
         var userRole = roleRepository.findByName ("USER")
-//                TODO: Better exception handling
+
                 .orElseThrow (() -> new IllegalStateException ("ROLE USER was not initialized"));
 
         var user = User.builder ()
@@ -117,7 +117,6 @@ public class AuthenticationService {
     //  @Transactional
     public void activateAccount(String token) throws MessagingException {
         Token savedToken = tokenRepository.findByToken (token)
-                // TODO: Better exception handling
                 .orElseThrow (() -> new RuntimeException ("Token not found"));
 
         if(LocalDateTime.now ().isAfter (savedToken.getExpiresAt ())){
