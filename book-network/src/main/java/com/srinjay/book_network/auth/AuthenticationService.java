@@ -9,7 +9,6 @@ import com.srinjay.book_network.user.TokenRepository;
 import com.srinjay.book_network.user.User;
 import com.srinjay.book_network.user.UserRepository;
 import jakarta.mail.MessagingException;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,7 +21,6 @@ import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -38,7 +36,7 @@ public class AuthenticationService {
     @Value ("${application.mailing.frontend.activation-url}")
     private String activationUrl;
 
-    public void regiter(RegistrationRequest request) throws MessagingException {
+    public void register(RegistrationRequest request) throws MessagingException {
         var userRole = roleRepository.findByName ("USER")
 
                 .orElseThrow (() -> new IllegalStateException ("ROLE USER was not initialized"));
