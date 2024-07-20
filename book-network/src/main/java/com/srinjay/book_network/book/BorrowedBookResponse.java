@@ -18,6 +18,3 @@ public class BorrowedBookResponse {
     private boolean returned;
     private boolean returnApproved;
 }
-/*vvvvvvvvvv
-
-* */

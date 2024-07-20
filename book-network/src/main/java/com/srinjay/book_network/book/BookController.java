@@ -17,7 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class BookController {
     private final BookService bookService;
 
-    @PostMapping("/add")
+    @PostMapping
     public ResponseEntity<Long> saveBook(
             @Valid @RequestBody BookRequest request,
             Authentication connectedUser
