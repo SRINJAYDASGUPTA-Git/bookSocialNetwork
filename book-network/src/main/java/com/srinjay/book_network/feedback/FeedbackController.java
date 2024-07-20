@@ -25,8 +25,8 @@ public class FeedbackController {
     @GetMapping("/book/{book-id}")
     public ResponseEntity<PageResponse<FeedbackResponse>> findAllFeedbacksByBook(
             @PathVariable("book-id") Long bookId,
-            @RequestParam(value = "page", defaultValue = "0", required = false) Integer page,
-            @RequestParam(value = "size", defaultValue = "10", required = false) Integer size,
+            @RequestParam(value = "page", defaultValue = "0", required = false) int page,
+            @RequestParam(value = "size", defaultValue = "10", required = false) int size,
             Authentication connectedUser
     ) {
         return ResponseEntity.ok(feedbackService.findAllFeedbacksByBook(bookId, page, size, connectedUser));
