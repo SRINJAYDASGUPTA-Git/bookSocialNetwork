@@ -693,7 +693,8 @@
         "required": [
           "email",
           "firstName",
-          "lastName"
+          "lastName",
+          "password"
         ],
         "type": "object",
         "properties": {
@@ -715,7 +716,8 @@
       },
       "AuthenticationRequest": {
         "required": [
-          "email"
+          "email",
+          "password"
         ],
         "type": "object",
         "properties": {
