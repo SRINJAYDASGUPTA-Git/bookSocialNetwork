@@ -21,19 +21,19 @@
   </ng-template>
 </div>
 <ng-template #codeForm>
-  <div class="flex justify-center items-center h-[100vh]">
-    <div class="text-center w-[400px] flex flex-col gap-3">
+  <div class="flex justify-center items-center h-[100vh] bg-gradient-to-br from-blue-200 to-cyan-200">
+    <div class="text-center w-[400px]  bg-white p-5 py-6 rounded-xl backdrop-blur-sm items-center justify-center flex flex-col gap-5">
       <h2 class="text-2xl font-semibold">
         Type your activation code
       </h2>
+      <span class="text-[18px] italic">A code has been sent to your email.</span>
       <code-input
         [isCodeHidden]="false"
         [codeLength]="6"
         [code]="'number'"
         (codeCompleted)="onCodeCompleted($event)"
-      >
-
-      </code-input>
+        class=""
+      />
     </div>
   </div>
 </ng-template>
