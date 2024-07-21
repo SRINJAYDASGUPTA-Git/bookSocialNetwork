@@ -8,11 +8,24 @@ import { AuthenticationService } from '../../services/services';
   styleUrl: './activate-account.component.scss'
 })
 export class ActivateAccountComponent {
-onCodeCompleted($event: string) {
-throw new Error('Method not implemented.');
+redirectToLogin() {
+this.router.navigate(['login']);
 }
-onCodeChanged($event: string) {
-throw new Error('Method not implemented.');
+onCodeCompleted(token: string) {
+  this.authService.confirm({
+    token
+  }).subscribe({
+    next: () => {
+      this.msg = "Account activated successfully!\n";
+      this.submitted = true;
+      this.isOkay = true;
+    },
+    error: (err) => {
+      this.msg = "Token is invalid or expired.\n";
+      this.submitted = true;
+      this.isOkay = false;
+    }
+  });
 }
   msg: string = "";
   isOkay: boolean = true;

@@ -1,36 +1,39 @@
-<div class="w-[100vw] h-screen bg-gradient-to-br from-blue-200 to-cyan-200">
-  <div
-    class="flex flex-col h-full justify-center items-center rounded-xl p-4 text-xl"
-  >
-    <form
-      class="w-[100%] md:w-[25%] bg-white/40 p-5 py-6 rounded-xl backdrop-blur-sm items-center justify-center flex flex-col gap-5 form-signin"
-    >
-      <span class="text-2xl md:text-3xl py-4 font-bold"
-        >Login To Your Account</span
-      >
-      <div class="alert alert-danger" role="alert" *ngIf="msg.length">
-        <p *ngFor="let msg of msg">{{ msg }}</p>
-      </div>
-      <div
-        class="flex flex-col w-[100%] md:w-[90%] bg-white p-5 px-4 rounded-xl text-[12px] gap-1"
-      >
-        <code-input
-          [isCodeHidden]="true"
-          [codeLength]="6"
-          
-          (codeChanged)="onCodeChanged($event)"
-          (codeCompleted)="onCodeCompleted($event)"
-        >
-        </code-input>
-      </div>
-
-      <button
-        type="submit"
-        (click)="activateAccount()"
-        class="bg-blue-500 text-white px-2 p-1 rounded-full w-[90%] hover:bg-blue-700 disabled:opacity-50 disabled:hover:bg-blue-500"
-      >
-        Login
-      </button>
-    </form>
+<div class="flex justify-center items-center h-[100vh]" *ngIf="submitted else codeForm">
+  <div class="text-center" *ngIf="isOkay else activationError">
+    <h2>
+      Activation Successful!
+    </h2>
+    <p>
+      Your Account has been activated successfully. You can now login to your account.
+    </p>
+    <button class="btn btn-primary" (click)="redirectToLogin()"> Go To Login</button>
   </div>
+  <ng-template #activationError>
+    <div class="flex flex-col text-center text-red-600 gap-3">
+      <h2 class="text-2xl font-semibold">
+        Activation failed
+      </h2>
+      <p>
+        {{msg}}
+      </p>
+      <button class="btn btn-primary" (click)="submitted = false"> Try Again</button>
+    </div>
+  </ng-template>
 </div>
+<ng-template #codeForm>
+  <div class="flex justify-center items-center h-[100vh]">
+    <div class="text-center w-[400px] flex flex-col gap-3">
+      <h2 class="text-2xl font-semibold">
+        Type your activation code
+      </h2>
+      <code-input
+        [isCodeHidden]="false"
+        [codeLength]="6"
+        [code]="'number'"
+        (codeCompleted)="onCodeCompleted($event)"
+      >
+
+      </code-input>
+    </div>
+  </div>
+</ng-template>
