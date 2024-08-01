@@ -14,7 +14,7 @@ import { CodeInputModule } from 'angular-code-input';
     AppComponent,
     LoginComponent,
     RegisterComponent,
-    ActivateAccountComponent
+    ActivateAccountComponent,
   ],
   imports: [
     BrowserModule,
