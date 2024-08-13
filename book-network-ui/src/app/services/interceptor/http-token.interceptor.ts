@@ -8,8 +8,7 @@ export class HttpTokenInterceptor implements HttpInterceptor {
 
   constructor(
     private tokenService: TokenService,
-  ) {
-  }
+  ) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const token = this.tokenService.token;

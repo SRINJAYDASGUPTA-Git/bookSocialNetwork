@@ -48,6 +48,10 @@ public class BookService {
         User user = (User) connectedUser.getPrincipal();
         Pageable pageable = PageRequest.of(page, size, Sort.by ("createdDate").descending ());
         Page<Book> books = bookRepository.findAllDisplayableBooks (user.getId (), pageable);
+
+        // Print user ID to console before processing books
+        System.out.println("User ID: " + user.getId());
+
         List<BookResponse> bookResponses = books.stream ()
                 .map(bookMapper::toBookResponse).toList ();
         return new PageResponse<> (
@@ -60,6 +64,7 @@ public class BookService {
                 books.isLast ()
         );
     }
+
 
     public PageResponse<BookResponse> findAllBooksByOwner(int page, int size, Authentication connectedUser) {
         User user = (User) connectedUser.getPrincipal();
