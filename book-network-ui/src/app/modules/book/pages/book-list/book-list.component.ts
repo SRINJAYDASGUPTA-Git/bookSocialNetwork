@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { BookService } from '../../../../services/services/book.service';
 import { Router } from '@angular/router';
-import { PageResponseBookResponse } from '../../../../services/models';
+import {BookResponse, PageResponseBookResponse} from '../../../../services/models';
 
 @Component({
   selector: 'app-book-list',
@@ -9,9 +9,11 @@ import { PageResponseBookResponse } from '../../../../services/models';
   styleUrl: './book-list.component.scss',
 })
 export class BookListComponent implements OnInit {
-   page: number = 0;
-   size: number = 2 ;
-   bookResponse: PageResponseBookResponse = {};
+  page: number = 0;
+  size: number = 4 ;
+  bookResponse: PageResponseBookResponse = {};
+  message: string = "";
+  label: string = 'success';
   constructor(private bookService: BookService, private router: Router) {}
 
   ngOnInit() {
@@ -60,5 +62,23 @@ export class BookListComponent implements OnInit {
 
   get isLastPage(): boolean {
     return this.page == this.bookResponse.totalPages as number -1;
+  }
+
+  borrowBook(book: BookResponse) {
+    this.message= "";
+    this.bookService.borrowBook({
+      "book-id": book.id as number
+    }).subscribe({
+        next: () => {
+          this.label = "success"
+          this.message = "Book borrowed successfully";
+        },
+        error: (error) => {
+          console.log(error);
+          this.label = "error";
+          this.message = error.error.error;
+        }
+      }
+    )
   }
 }
