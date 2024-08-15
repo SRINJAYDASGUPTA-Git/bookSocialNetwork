@@ -42,36 +42,7 @@ export class BorrowedBookListComponent implements OnInit {
       });
   }
 
-  returnBook(withFeedback: boolean) {
-    this.bookService
-      .returnBook({
-        'book-id': this.selectedBook?.id as number,
-      })
-      .subscribe({
-        next: () => {
-          console.log(this.selectedBook?.id)
-          if (withFeedback) {
-            this.giveFeedback();
-          }
-          this.selectedBook = undefined;
-          this.findBorrowedBooks();
-        },
-      });
-  }
-  giveFeedback() {
-    this.feedbackService.saveFeedback({
-      body: this.feedbackRequest
-    }).subscribe({
-      next: () => {
-        this.feedbackRequest = { bookId: 0, comment: '', rating: 0 };
-      }
-    });
-  }
-  returnBorrowedBook(book: BorrowedBookResponse) {
-    this.selectedBook = book;
-    console.log(book);
-    this.feedbackRequest.bookId = book.id as number;
-  }
+
 
   get isLastPage(): boolean {
     return this.page == (this.borrowedBooks.totalPages as number) - 1;
@@ -101,4 +72,34 @@ export class BorrowedBookListComponent implements OnInit {
     this.page = (this.borrowedBooks.totalPages as number) - 1;
     this.findBorrowedBooks();
   }
+  returnBorrowedBook(book: BorrowedBookResponse) {
+    this.selectedBook = book;
+    this.feedbackRequest.bookId = book.id as number;
+  }
+  returnBook(withFeedback: boolean) {
+    this.bookService
+      .returnBook({
+        'book-id': this.selectedBook?.id as number,
+      })
+      .subscribe({
+        next: () => {
+          console.log(this.selectedBook?.id)
+          if (withFeedback) {
+            this.giveFeedback();
+          }
+          this.selectedBook = undefined;
+          this.findBorrowedBooks();
+        },
+      });
+  }
+  giveFeedback() {
+    this.feedbackService.saveFeedback({
+      body: this.feedbackRequest
+    }).subscribe({
+      next: () => {
+        this.feedbackRequest = { bookId: 0, comment: '', rating: 0 };
+      }
+    });
+  }
+
 }
