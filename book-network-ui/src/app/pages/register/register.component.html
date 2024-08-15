@@ -1,97 +1,34 @@
-<div class="w-[100vw] h-screen bg-gradient-to-br from-blue-200 to-cyan-200">
-  <div
-    class="flex flex-col h-full justify-center items-center rounded-xl p-4 text-xl"
-  >
-    <form
-      #registerForm="ngForm"
-      class="w-[100%] md:w-[25%] bg-white/40 p-5 py-6 rounded-xl backdrop-blur-sm items-center justify-center flex flex-col gap-5"
-    >
-      <span class="text-2xl md:text-3xl py-4 font-bold">
-        Create a New Account</span
-      >
-      <div class="alert alert-danger" role="alert" *ngIf="errorMsg.length">
-        <p *ngFor="let msg of errorMsg">{{ msg }}</p>
-      </div>
-      <div
-        class="flex flex-col w-[100%] md:w-[90%] bg-white p-2 px-4 rounded-xl text-[12px] gap-1"
-      >
-        <label>First Name: </label>
-        <input
-          type="text"
-          name="firstName"
-          required
-          autofocus=""
-          [(ngModel)]="registerRequest.firstName"
-          #email="ngModel"
-          [class.is-invalid]="!email.valid && !email.pristine"
-          placeholder="Enter your First Name"
-          class="bg-transparent border-transparent focus:outline-none focus:ring-transparent focus:border-none form-control"
-        />
-      </div>
-      <div
-        class="flex flex-col w-[100%] md:w-[90%] bg-white p-2 px-4 rounded-xl text-[12px] gap-1"
-      >
-        <label>Last Name: </label>
-        <input
-          type="text"
-          name="lastName"
-          required
-          autofocus=""
-          [(ngModel)]="registerRequest.lastName"
-          #email="ngModel"
-          [class.is-invalid]="!email.valid && !email.pristine"
-          placeholder="Enter your Last Name"
-          class="bg-transparent border-transparent focus:outline-none focus:ring-transparent focus:border-none form-control"
-        />
-      </div>
-      <div
-        class="flex flex-col w-[100%] md:w-[90%] bg-white p-2 px-4 rounded-xl text-[12px] gap-1"
-      >
-        <label>Email: </label>
-        <input
-          type="text"
-          name="email"
-          required
-          autofocus=""
-          email
-          [(ngModel)]="registerRequest.email"
-          #email="ngModel"
-          [class.is-invalid]="!email.valid && !email.pristine"
-          placeholder="Enter your Email"
-          class="bg-transparent border-transparent focus:outline-none focus:ring-transparent focus:border-none form-control"
-        />
-      </div>
-      <div
-        class="flex flex-col w-[100%] md:w-[90%] bg-white p-2 px-4 rounded-xl text-[12px] gap-1"
-      >
-        <label>Password: </label>
-        <input
-          type="password"
-          id="password"
-          name="password"
-          required=""
-          [(ngModel)]="registerRequest.password"
-          #password="ngModel"
-          placeholder="Enter your password"
-          class="bg-transparent border-transparent focus:outline-none focus:ring-transparent focus:border-none form-control"
-        />
-      </div>
-
-      <button
-        type="submit"
-        (click)="register()"
-        class="bg-blue-500 text-white px-2 p-1 rounded-full w-[90%] hover:bg-blue-700 disabled:opacity-50 disabled:hover:bg-blue-500"
-      >
-        Register
+<div class="container-fluid card login-container">
+  <h3 class="text-center">Create an account</h3>
+  <hr>
+  <div class="alert alert-danger" role="alert" *ngIf="errorMsg.length">
+    <p *ngFor="let msg of errorMsg">{{msg}}</p>
+  </div>
+  <div class="mb-3">
+    <label for="firstname" class="form-label">Firstname</label>
+    <input [(ngModel)]="registerRequest.firstName" type="text" class="form-control" id="firstname" placeholder="Firstname">
+  </div>
+  <div class="mb-3">
+    <label for="lastname" class="form-label">Lastname</label>
+    <input [(ngModel)]="registerRequest.lastName" type="text" class="form-control" id="lastname" placeholder="Lastname">
+  </div>
+  <div class="mb-3">
+    <label for="login" class="form-label">Email address</label>
+    <input [(ngModel)]="registerRequest.email" type="email" class="form-control" id="login" placeholder="name@example.com">
+  </div>
+  <div class="mb-3">
+    <label for="password" class="form-label">Password</label>
+    <input [(ngModel)]="registerRequest.password" type="password" class="form-control" id="password" placeholder="Password">
+  </div>
+  <div class="d-flex justify-content-between mb-3">
+    <button (click)="register()" type="button" class="btn btn-primary">
+      <em class="fas fa-sign-in-alt">&nbsp;Create an account</em>
+    </button>
+    <div>
+      Already have an account?&nbsp;
+      <button (click)="login()" type="button" class="btn btn-link">
+        Login
       </button>
-
-      <div class="w-full flex items-center justify-between py-2 text-[12px]">
-        <p class="hover:underline cursor-pointer" (click)="login()">
-          Sign In
-        </p>
-
-        <p class="hover:underline cursor-pointer">Forgot Password?</p>
-      </div>
-    </form>
+    </div>
   </div>
 </div>

@@ -38,10 +38,9 @@ public class BookService {
     }
 
     public BookResponse findBookById(Long bookId) {
-        bookRepository.findById (bookId)
+        return bookRepository.findById (bookId)
                 .map(bookMapper::toBookResponse)
                 .orElseThrow (()-> new EntityNotFoundException("No book found with id " + bookId));
-        return null;
     }
 
     public PageResponse<BookResponse> findAllBooks(int page, int size, Authentication connectedUser) {

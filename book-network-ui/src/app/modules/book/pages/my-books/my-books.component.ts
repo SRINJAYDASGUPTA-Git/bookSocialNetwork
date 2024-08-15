@@ -15,22 +15,12 @@ export class MyBooksComponent {
   bookResponse: PageResponseBookResponse = {};
   constructor(private bookService: BookService, private router: Router) {}
 
+  get isLastPage(): boolean {
+    return this.page == this.bookResponse.totalPages as number -1;
+  }
+
   ngOnInit() {
     this.findOwnerBooks();
-  }
-  private findOwnerBooks() {
-    this.bookService.findAllBooksByOwner({
-      page: this.page,
-      size: this.size,
-    }).subscribe({
-      next: (books) => {
-        this.bookResponse = books;
-        console.log(this.bookResponse);
-      },
-      error: (error) => {
-        console.log(error);
-      }
-    });
   }
 
   gotoFirstPage() {
@@ -59,19 +49,43 @@ export class MyBooksComponent {
     this.findOwnerBooks();
   }
 
-  get isLastPage(): boolean {
-    return this.page == this.bookResponse.totalPages as number -1;
-  }
-
   archiveBook(book: BookResponse) {
-
+    this.bookService.updateArchivedStatus({
+      'book-id': book.id as number,
+    }).subscribe({
+      next: ()=>{
+        book.archived = !book.archived;
+      }
+    })
   }
 
   editBook(book: BookResponse) {
-    this.router.navigate(['/books/manage', book.id]);
+    this.router.navigate(['/books/manage', book.id]).then(r => r);
   }
 
   shareBook(book: BookResponse) {
+    this.bookService.updateShareableStatus({
+      'book-id': book.id as number,
 
+    }).subscribe({
+        next: ()=>{
+          book.shareable = !book.shareable;
+        }
+      })
+  }
+
+  private findOwnerBooks() {
+    this.bookService.findAllBooksByOwner({
+      page: this.page,
+      size: this.size,
+    }).subscribe({
+      next: (books) => {
+        this.bookResponse = books;
+        console.log(this.bookResponse);
+      },
+      error: (error) => {
+        console.log(error);
+      }
+    });
   }
 }

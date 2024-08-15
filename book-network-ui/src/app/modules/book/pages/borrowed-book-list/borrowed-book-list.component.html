@@ -1,0 +1,171 @@
+<h2>My Borrowed Books</h2>
+<hr />
+
+<div class="d-flex flex-column col-6" *ngIf="selectedBook">
+  <h2>Return and Share Feedback</h2>
+
+  <div class="d-flex flex-column col-12">
+    <div class="d-flex">
+      <div class="col-1">
+        <strong>Title</strong>
+      </div>
+      <div class="col-11">{{ selectedBook.title }}</div>
+    </div>
+    <div class="d-flex">
+      <div class="col-1">
+        <strong>Author</strong>
+      </div>
+      <div class="col-11">{{ selectedBook.author }}</div>
+    </div>
+    <div class="d-flex">
+      <div class="col-1">
+        <strong>ISBN</strong>
+      </div>
+      <div class="col-11">{{ selectedBook.isbn }}</div>
+    </div>
+    <div class="d-flex">
+      <div class="col-1">
+        <strong>Rate</strong>
+      </div>
+      <div class="col-11">{{ selectedBook.rate }}</div>
+    </div>
+  </div>
+
+  <hr />
+  <div class="col-12">
+    <form class="row g-3">
+      <div class="d-flex gap-3">
+        <input type="range" [(ngModel)] = "feedbackRequest.rating" id="rate" name="rate" class="form-range w-25" min="0" max="5" step="0.5"/>
+        <app-rating [rating]="feedbackRequest.rating || 0"></app-rating>
+        {{feedbackRequest.rating}}
+      </div>
+      <div class="col-12">
+        <label for="feedback" class="form-label">
+          Feedback
+        </label>
+        <textarea name="feedback" id="feedback" [(ngModel)] = "feedbackRequest.comment" rows="4" class="form-control" placeholder="Feedback"></textarea>
+      </div>
+      <div class="d-flex justify-content-end col-12 gap-2">
+        <button (click)="returnBook(true)" type="submit" class="btn btn-outline-primary">
+          <i class="fas fa-save"></i>&nbsp;Rate the book & Return
+        </button>
+        <button (click)="returnBook(false)" type="submit" class="btn btn-outline-primary">
+          <i class="fa-solid fa-paper-plane"></i>&nbsp;Return without rating
+        </button>
+        <button (click)="selectedBook = undefined" class="btn btn-outline-danger">
+          <i class="fas fa-times"></i> &nbsp;Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div *ngIf="!selectedBook">
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Title</th>
+        <th scope="col">Author</th>
+        <th scope="col">ISBN</th>
+        <th scope="col">Rate</th>
+        <th scope="col"><i class="fas fa-cogs"></i></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let book of borrowedBooks.content; let i = index">
+        <th scope="row">{{ i + 1 }}</th>
+        <td>{{ book.title }}</td>
+        <td>{{ book.author }}</td>
+        <td>{{ book.isbn }}</td>
+        <td>
+          <app-rating [rating]="book.rate || 0"></app-rating>
+        </td>
+        <td>
+          <div class="d-flex gap-2">
+            <i
+              *ngIf="book.returned"
+              class="fa-regular fa-paper-plane text-primary"
+            ></i>
+            <i
+              (click)="returnBorrowedBook(book)"
+              *ngIf="!book.returned"
+              class="fa-solid fa-paper-plane text-success"
+            ></i>
+            <i
+              [class.text-success]="book.returnApproved"
+              class="fa-solid fa-circle-check"
+            ></i>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="d-flex justify-content-center mt-3">
+    <nav aria-label="Page Navigation Example">
+      <ul class="pagination">
+        <li class="page-item">
+          <a
+            (click)="gotoFirstPage()"
+            [class.disabled]="page == 0"
+            aria-label="Previous"
+            class="page-link"
+            href="javascript:void(0)"
+          >
+            <i class="fa-solid fa-angles-left"></i>
+          </a>
+        </li>
+        <li class="page-item">
+          <a
+            (click)="gotoPreviousPage()"
+            [class.disabled]="page == 0"
+            aria-label="Previous"
+            class="page-link"
+            href="javascript:void(0)"
+          >
+            <i class="fa-solid fa-angle-left"></i>
+          </a>
+        </li>
+        <li
+          *ngFor="
+            let _ of [].constructor(this.borrowedBooks.totalPages);
+            let pageIndex = index
+          "
+          class="page-item"
+        >
+          <a
+            (click)="gotoPage(pageIndex)"
+            [class.active]="pageIndex == page"
+            aria-label="Previous"
+            class="page-link"
+            href="javascript:void(0)"
+          >
+            {{ pageIndex + 1 }}
+          </a>
+        </li>
+        <li class="page-item">
+          <a
+            (click)="gotoNextPage()"
+            [class.disabled]="isLastPage"
+            aria-label="Previous"
+            class="page-link"
+            href="javascript:void(0)"
+          >
+            <i class="fa-solid fa-chevron-right"></i>
+          </a>
+        </li>
+        <li class="page-item">
+          <a
+            (click)="gotoLastPage()"
+            [class.disabled]="isLastPage"
+            aria-label="Previous"
+            class="page-link"
+            href="javascript:void(0)"
+          >
+            <i class="fa-solid fa-angles-right"></i>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>

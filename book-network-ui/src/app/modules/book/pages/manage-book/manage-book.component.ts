@@ -27,17 +27,21 @@ export class ManageBookComponent implements OnInit {
         "book-id": bookId
       }).subscribe({
         next: (book) => {
-          console.log(book.title);
+
           this.bookRequest = {
             id: book.id,
             title: book.title as string,
             author: book.author as string,
             isbn: book.isbn as string,
             synopsis: book.synopsis as string,
-            shareable: book.shareable
+            shareable: book.shareable,
+
+          }
+          if (book.cover) {
+            this.selectedPicture = `data:image/jpeg;base64,${book.cover}`;
           }
         }
-      });
+      })
     }
   }
   onFileSelected(file: any) {
