@@ -20,6 +20,15 @@ services:
     ports:
       - 1080:1080
       - 1025:1025
+  bsn-api:
+    container_name: bsn-api
+    image: bsn/bsn:1.0.0
+    ports:
+      - 8080:8080
+    networks:
+      - spring-boot-network
+    depends_on:
+      - postgres
 
 networks:
     spring-boot-network:
