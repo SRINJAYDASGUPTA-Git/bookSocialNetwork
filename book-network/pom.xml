@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.srinjay</groupId>
 	<artifactId>book-network</artifactId>
-	<version>1.0.5</version>
+	<version>1.0.7</version>
 	<name>book-network-api</name>
 	<description>Book Network API</description>
 	<url/>
