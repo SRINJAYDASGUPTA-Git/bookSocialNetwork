@@ -73,19 +73,25 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build & Push to DockerHub
-        uses: docker/build-push-action@v5
-        with:
-          context: book-network
-          file: docker/backend/Dockerfile
-          push: true
-          platforms: windows/amd64
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/bsn-api:${{ steps.extract_version.outputs.VERSION }},${{ secrets.DOCKERHUB_USERNAME }}/bsn-api:latest
-          build-args: |
-            PROFILE=dev
-            APP_VERSION=${{ steps.extract_version.outputs.VERSION }}
-  
-  
+      - name: Build & Push Docker Image
+        run: |
+          # Define variables
+          $imageTag = "${{ secrets.DOCKERHUB_USERNAME }}/bsn-api:${{ steps.extract_version.outputs.VERSION }}"
+          $latestTag = "${{ secrets.DOCKERHUB_USERNAME }}/bsn-api:latest"
+          $buildContext = "book-network"
+          $dockerfile = "docker/backend/Dockerfile"
+
+          # Build the Docker image
+          docker build --platform linux/amd64 -t $latestTag -t $imageTag -f $dockerfile $buildContext --build-arg PROFILE=dev --build-arg APP_VERSION=${{ steps.extract_version.outputs.VERSION }}
+
+          # Push the Docker image to Docker Hub
+          docker push $latestTag
+          docker push $imageTag
+        shell: pwsh
+        env:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+
   deploy:
     name: Deploy Backend
     runs-on: ubuntu-latest

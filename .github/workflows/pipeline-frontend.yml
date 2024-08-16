@@ -32,14 +32,24 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build & Push to DockerHub
-        uses: docker/build-push-action@v5
-        with:
-          context: book-network-ui
-          file: docker/frontend/Dockerfile
-          push: true
-          platforms: windows/amd64
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/bsn-ui:latest,${{ secrets.DOCKERHUB_USERNAME }}/bsn-ui:${{ steps.extract_version.outputs.VERSION }}
+      - name: Build & Push Docker Image
+        run: |
+          # Ensure Docker is running
+          docker version
+
+          # Build the Docker image
+          $imageTag = "${{ secrets.DOCKERHUB_USERNAME }}/bsn-ui:${{ steps.extract_version.outputs.VERSION }}"
+          $latestTag = "${{ secrets.DOCKERHUB_USERNAME }}/bsn-ui:latest"
+          docker build --platform linux/amd64 -t $latestTag -t $imageTag -f docker/frontend/Dockerfile book-network-ui
+          
+          # Push the Docker image to Docker Hub
+          docker push $latestTag
+          docker push $imageTag
+        shell: pwsh
+        env:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+
 
   deploy:
     name: Deploy Frontend
