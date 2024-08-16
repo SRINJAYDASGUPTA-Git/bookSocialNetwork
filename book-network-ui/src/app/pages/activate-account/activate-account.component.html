@@ -1,39 +1,27 @@
-<div class="flex justify-center items-center h-[100vh]" *ngIf="submitted else codeForm">
-  <div class="text-center" *ngIf="isOkay else activationError">
-    <h2>
-      Activation Successful!
-    </h2>
-    <p>
-      Your Account has been activated successfully. You can now login to your account.
-    </p>
-    <button class="btn btn-primary" (click)="redirectToLogin()"> Go To Login</button>
+<div class="container" *ngIf="submitted else codeForm">
+  <div class="activation-message" *ngIf="isOkay; else activationError">
+    <h2>Activation Successful!</h2>
+    <p>Your account has been successfully activated.</p>
+    <button class="btn btn-primary" (click)="redirectToLogin()">Go to Login</button>
   </div>
   <ng-template #activationError>
-    <div class="flex flex-col text-center text-red-600 gap-3">
-      <h2 class="text-2xl font-semibold">
-        Activation failed
-      </h2>
-      <p>
-        {{msg}}
-      </p>
-      <button class="btn btn-primary" (click)="submitted = false"> Try Again</button>
+    <div class="activation-error">
+      <h2>Activation Failed!</h2>
+      <p>{{ msg }}</p>
+      <button class="btn btn-primary" (click)="submitted = false">Try again</button>
     </div>
   </ng-template>
 </div>
 <ng-template #codeForm>
-  <div class="flex justify-center items-center h-[100vh] bg-gradient-to-br from-blue-200 to-cyan-200">
-    <div class="text-center w-[400px]  bg-white p-5 py-6 rounded-xl backdrop-blur-sm items-center justify-center flex flex-col gap-5">
-      <h2 class="text-2xl font-semibold">
-        Type your activation code
-      </h2>
-      <span class="text-[18px] italic">A code has been sent to your email.</span>
-      <code-input
-        [isCodeHidden]="false"
-        [codeLength]="6"
-        [code]="'number'"
-        (codeCompleted)="onCodeCompleted($event)"
-        class=""
-      />
+  <div class="container">
+    <div class="text-center" style="width: 400px;">
+      <h2>Type your activation code</h2>
+      <code-input [isCodeHidden]="false"
+                  [codeLength]="6"
+                  [code]="'number'"
+                  (codeCompleted)="onCodeCompleted($event)">
+      </code-input>
+      <button class="btn btn-primary mt-3" (click)="redirectToLogin()">Go to Login</button>
     </div>
   </div>
 </ng-template>

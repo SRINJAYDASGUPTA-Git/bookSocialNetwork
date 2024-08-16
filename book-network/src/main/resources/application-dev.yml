@@ -33,7 +33,7 @@ application:
       expiration: 86400000
   mailing:
     frontend:
-      activation-url: http://localhost:4200/activate-account
+      activation-url: http://localhost:8080/activate-account
   file:
     uploads:
       photos-output-path: ./uploads
