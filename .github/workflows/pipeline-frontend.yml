@@ -31,27 +31,19 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-#      - name: Elevate Privileges (PowerShell)
-#        run: Start-Process powershell -Verb runAs
-#        shell: pwsh
-      - name: Build & Push Docker Image
-        run: |
-          # Ensure Docker is running
-          docker version
 
-          # Build the Docker image
-          $imageTag = "${{ secrets.DOCKERHUB_USERNAME }}/bsn-ui:${{ steps.extract_version.outputs.VERSION }}"
-          $latestTag = "${{ secrets.DOCKERHUB_USERNAME }}/bsn-ui:latest"
-          sudo docker buildx build --platform linux/amd64 -t $latestTag -t $imageTag -f docker/frontend/Dockerfile --push book-network-ui
-          
-          # Push the Docker image to Docker Hub
-          docker push $latestTag
-          docker push $imageTag
-        shell: bash
-        env:
-          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-          DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
+      - name: Build & Push to DockerHub
+        uses: docker/build-push-action@v5
+        with:
+          load: true
+          context: book-network-ui
+          file: docker/frontend/Dockerfile
+          push: true
+          platforms: linux/amd64
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/bsn-ui:latest,${{ secrets.DOCKERHUB_USERNAME }}/bsn-ui:${{ steps.extract_version.outputs.VERSION }}
 
   deploy:
     name: Deploy Frontend
