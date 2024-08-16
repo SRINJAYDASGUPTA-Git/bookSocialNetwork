@@ -38,7 +38,7 @@ jobs:
           context: book-network-ui
           file: docker/frontend/Dockerfile
           push: true
-          platforms: linux/amd64
+          platforms: windows/amd64
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/bsn-ui:latest,${{ secrets.DOCKERHUB_USERNAME }}/bsn-ui:${{ steps.extract_version.outputs.VERSION }}
 
   deploy:
