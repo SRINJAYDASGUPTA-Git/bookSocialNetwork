@@ -31,9 +31,9 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Elevate Privileges (PowerShell)
-        run: Start-Process powershell -Verb runAs
-        shell: pwsh
+#      - name: Elevate Privileges (PowerShell)
+#        run: Start-Process powershell -Verb runAs
+#        shell: pwsh
       - name: Build & Push Docker Image
         run: |
           # Ensure Docker is running
@@ -42,12 +42,12 @@ jobs:
           # Build the Docker image
           $imageTag = "${{ secrets.DOCKERHUB_USERNAME }}/bsn-ui:${{ steps.extract_version.outputs.VERSION }}"
           $latestTag = "${{ secrets.DOCKERHUB_USERNAME }}/bsn-ui:latest"
-          docker build --platform linux/amd64 -t $latestTag -t $imageTag -f docker/frontend/Dockerfile book-network-ui
+          sudo docker buildx build --platform linux/amd64 -t $latestTag -t $imageTag -f docker/frontend/Dockerfile --push book-network-ui
           
           # Push the Docker image to Docker Hub
           docker push $latestTag
           docker push $imageTag
-        shell: pwsh
+        shell: bash
         env:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
           DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
