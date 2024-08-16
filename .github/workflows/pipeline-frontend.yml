@@ -18,14 +18,13 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Install jq
-        run: sudo apt-get install -y jq
-
       - name: Extract project version
         id: extract_version
         run: |
           cd book-network-ui
-          echo "VERSION=$(jq -r '.version' package.json)" >> $GITHUB_OUTPUT
+          $version = (Get-Content package.json | ConvertFrom-Json).version
+          echo "VERSION=$version" >> $env:GITHUB_OUTPUT
+        shell: pwsh
 
       - name: Login to DockerHub
         uses: docker/login-action@v3
