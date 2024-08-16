@@ -12,7 +12,7 @@ on:
 jobs:
   build-image:
     name: Build FE Docker image
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -38,14 +38,13 @@ jobs:
           push: true
           platforms: linux/amd64
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/bsn-ui:latest,${{ secrets.DOCKERHUB_USERNAME }}/bsn-ui:${{ steps.extract_version.outputs.VERSION }}
-
   deploy:
     name: Deploy Frontend
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     needs: [ build-image ]
     steps:
       - name: Setup SSH
-        uses: webfactory/ssh-agent@v0.8.1
+        uses: webfactory/ssh-agent@v0.9.0
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
       - run: ssh-keyscan -t rsa your_host >> ~/.ssh/known_hosts

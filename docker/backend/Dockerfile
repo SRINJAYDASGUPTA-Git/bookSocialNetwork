@@ -9,7 +9,7 @@ RUN mvn clean package -DskipTests
 #Runtime
 FROM amazoncorretto:21
 ARG PROFILE=dev
-ARG APP_VERSION=1.0.7
+ARG APP_VERSION=1.0.0
 
 WORKDIR /app
 COPY --from=build /build/target/book-network-*.jar /app/
