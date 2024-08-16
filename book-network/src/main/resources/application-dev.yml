@@ -14,25 +14,22 @@ spring:
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
   mail:
-    host: localhost
-    port: 1025
-    username: sdg
-    password: sdg
+    host: smtp.gmail.com
+    port: 587
+    username: dasguptasrinjay7@gmail.com
+    password: cljz mqvf vkij xtkc
     properties:
         mail:
             smtp:
-              trust: "*"
-            auth: true
-            starttls:
+              auth: true
+              starttls:
                 enable: true
-            connectiontimeout: 5000
-            timeout: 3000
-            writetimeout: 5000
-
+                trust: "*"
+    protocol: smtp
 application:
   security:
     jwt:
-      secret-key: ${SECRET_KEY}
+      secret-key: A5C598F68CD00A21B197B19EB336FA0A2C552F2D101AFEB94399189961C968D2
       expiration: 86400000
   mailing:
     frontend:
@@ -40,3 +37,6 @@ application:
   file:
     uploads:
       photos-output-path: ./uploads
+
+server:
+  port: 8088

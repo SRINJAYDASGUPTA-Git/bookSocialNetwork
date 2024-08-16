@@ -9,12 +9,12 @@ RUN mvn clean package -DskipTests
 #Runtime
 FROM amazoncorretto:21
 ARG PROFILE=dev
-ARG APP_VERSION=1.0.0
+ARG APP_VERSION=1.0.5
 
 WORKDIR /app
 COPY --from=build /build/target/book-network-*.jar /app/
 
-EXPOSE 8080
+EXPOSE 8088
 
 ENV DB_URL=jdbc:postgresql://postgres-sql-bsn:5432/book_social_network
 ENV ACTIVE_PROFILE=${PROFILE}
