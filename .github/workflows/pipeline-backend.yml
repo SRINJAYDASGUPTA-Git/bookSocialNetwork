@@ -12,7 +12,7 @@ on:
 
 jobs:
   compile:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     name: Compile project
     steps:
       - name: Checkout code
@@ -31,7 +31,7 @@ jobs:
           cd book-network
           ./mvnw clean compile
   build:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     name: Build backend
     needs: [compile]
     steps:
@@ -53,7 +53,7 @@ jobs:
 
   build-image:
     name: Build Docker image
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     needs: [build]
     steps:
       - name: Setup JDK
@@ -72,27 +72,18 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Elevate Privileges (PowerShell)
-        run: Start-Process powershell -Verb runAs
-        shell: pwsh
-      - name: Build & Push Docker Image
-        run: |
-          # Define variables
-          $imageTag = "${{ secrets.DOCKERHUB_USERNAME }}/bsn-api:${{ steps.extract_version.outputs.VERSION }}"
-          $latestTag = "${{ secrets.DOCKERHUB_USERNAME }}/bsn-api:latest"
-          $buildContext = "book-network"
-          $dockerfile = "docker/backend/Dockerfile"
 
-          # Build the Docker image
-          docker build --platform linux/amd64 -t $latestTag -t $imageTag -f $dockerfile $buildContext --build-arg PROFILE=dev --build-arg APP_VERSION=${{ steps.extract_version.outputs.VERSION }}
-
-          # Push the Docker image to Docker Hub
-          docker push $latestTag
-          docker push $imageTag
-        shell: pwsh
-        env:
-          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-          DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Build & Push to DockerHub
+        uses: docker/build-push-action@v5
+        with:
+          context: book-network
+          file: docker/backend/Dockerfile
+          push: true
+          platforms: linux/amd64
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/bsn-api:${{ steps.extract_version.outputs.VERSION }},${{ secrets.DOCKERHUB_USERNAME }}/bsn-api:latest
+          build-args: |
+            PROFILE=dev
+            APP_VERSION=${{ steps.extract_version.outputs.VERSION }}
 
   deploy:
     name: Deploy Backend
@@ -100,9 +91,10 @@ jobs:
     needs: [build-image]
     steps:
       - name: Setup SSH
-        uses: webfactory/ssh-agent@v0.8.1
+        uses: webfactory/ssh-agent@v0.9.0
         with:
-          ssh-private-key: ${{ secrets.EC2_KEY }}
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+      - run: ssh-keyscan -t rsa your_host >> ~/.ssh/known_hosts
 
       - name: Create deployment folder
         run: ssh ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "mkdir -p ci-cd"
