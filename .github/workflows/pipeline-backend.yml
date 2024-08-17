@@ -66,6 +66,7 @@ jobs:
         id: extract_version
         run: |
           cd book-network
+          chmod +x mvnw
           echo "VERSION=$(./mvnw org.apache.maven.plugins:maven-help-plugin:3.1.0:evaluate "-Dexpression=project.version" -q "-DforceStdout")" >> $GITHUB_OUTPUT
 
       - name: Login to DockerHub
@@ -81,7 +82,7 @@ jobs:
           file: docker/backend/Dockerfile
           push: true
           platforms: linux/amd64
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/bsn-api:${{ steps.extract_version.outputs.VERSION }},${{ secrets.DOCKERHUB_USERNAME }}/bsn-api:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/bsn-api:latest,${{ secrets.DOCKERHUB_USERNAME }}/bsn-api:${{ steps.extract_version.outputs.VERSION }}
           build-args: |
             PROFILE=dev
             APP_VERSION=${{ steps.extract_version.outputs.VERSION }}
