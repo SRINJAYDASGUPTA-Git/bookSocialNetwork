@@ -57,6 +57,11 @@ jobs:
         with:
           java-version: '21'
           distribution: 'corretto'
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
       - name: Extract project version
         id: extract_version
         run: |
