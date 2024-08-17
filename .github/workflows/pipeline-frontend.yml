@@ -59,6 +59,11 @@ jobs:
         run: |
           ssh -i key.pem ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "mkdir -p ci-cd"
 
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
       - name: Copy docker-compose file
         run: |
           ls -la  # List files in the current directory to verify the presence of docker-compose.yml

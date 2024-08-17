@@ -111,6 +111,11 @@ jobs:
       - name: Create deployment folder
         run: ssh ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "mkdir -p ci-cd"
 
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          
       - name: Copy docker-compose file
         run: scp -oStrictHostKeyChecking=no docker-compose.yml ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:ci-cd/docker-compose.yml
 
