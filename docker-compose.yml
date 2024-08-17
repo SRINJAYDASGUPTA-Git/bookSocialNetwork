@@ -14,17 +14,9 @@ services:
     networks:
       - spring-boot-network
     restart: unless-stopped
-  mail-dev:
-    container_name: mail-dev-bsn
-    image: maildev/maildev
-    ports:
-      - 1080:1080
-      - 1025:1025
   bsn-api:
     container_name: bsn-api
-    image: bsn/bsn:1.0.0
-    env_file:
-      - .env.local
+    image: srinjay2004/bsn-api:1.0.0
     ports:
       - 8088:8088
     networks:
@@ -33,7 +25,7 @@ services:
       - postgres
   bsn-ui:
     container_name: bsn-ui
-    image: bsn/bsn-ui:1.0.1
+    image: srinjay2004/bsn-ui:1.0.0
     ports:
       - 8080:80
     networks:

@@ -47,17 +47,37 @@ jobs:
         uses: webfactory/ssh-agent@v0.9.0
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+      - name: Add SSH key
+        run: |
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > key.pem
+          chmod 600 key.pem
+          eval $(ssh-agent -s)
+          ssh-add key.pem
+          ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
 
-      - name: Create deployment folder
-        run: ssh ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "mkdir -p ci-cd"
+      - name: Create deployment folder on EC2
+        run: |
+          ssh -i key.pem ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "mkdir -p ci-cd"
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Copy docker-compose file
-        run: scp -oStrictHostKeyChecking=no docker-compose.yml ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:ci-cd/docker-compose.yml
+        run: |
+          ls -la  # List files in the current directory to verify the presence of docker-compose.yml
+          scp -oStrictHostKeyChecking=no $GITHUB_WORKSPACE/docker-compose.yml ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:ci-cd/docker-compose.yml
 
       - name: Set ENV variable and deploy
         run: |
-          ssh ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} <<EOF
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > key.pem
+          chmod 600 key.pem
+          eval $(ssh-agent -s)
+          ssh-add key.pem
+          ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
+          ssh -i key.pem ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} <<EOF
           cd ci-cd
-          docker compose -f docker-compose.yml pull -q
-          docker compose -f docker-compose.yml up -d
+          docker-compose -f docker-compose.yml pull -q
+          docker-compose -f docker-compose.yml up -d
           EOF
