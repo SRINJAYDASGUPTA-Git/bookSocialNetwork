@@ -47,7 +47,6 @@ jobs:
         uses: webfactory/ssh-agent@v0.9.0
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-      - run: ssh-keyscan -t rsa your_host >> ~/.ssh/known_hosts
 
       - name: Create deployment folder
         run: ssh ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "mkdir -p ci-cd"
