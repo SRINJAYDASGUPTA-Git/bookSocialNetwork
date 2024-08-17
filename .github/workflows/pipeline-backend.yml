@@ -131,6 +131,6 @@ jobs:
           export SECRET_KEY=${{ secrets.SECRET_KEY }}
           export SMTP_PASSWORD=${{ secrets.SMTP_PASSWORD }}
           cd ci-cd
-          docker compose -f docker-compose.yml pull -q
-          docker compose -f docker-compose.yml up -d
+          docker-compose -f docker-compose.yml pull -q
+          docker-compose -f docker-compose.yml up -d
           EOF

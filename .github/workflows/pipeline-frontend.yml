@@ -71,8 +71,13 @@ jobs:
 
       - name: Set ENV variable and deploy
         run: |
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > key.pem
+          chmod 600 key.pem
+          eval $(ssh-agent -s)
+          ssh-add key.pem
+          ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
           ssh -i key.pem ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} <<EOF
           cd ci-cd
-          docker compose -f docker-compose.yml pull -q
-          docker compose -f docker-compose.yml up -d
+          docker-compose -f docker-compose.yml pull -q
+          docker-compose -f docker-compose.yml up -d
           EOF
