@@ -33,7 +33,7 @@ import io.swagger.v3.oas.annotations.servers.Server;
                 ),
                 @Server(
                         description = "Production Server",
-                        url = "https://book-network.herokuapp.com/api/v1"
+                        url = "http://13.61.27.122:8088/api/v1"
                 )
         },
         security = {
