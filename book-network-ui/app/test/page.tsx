@@ -1,21 +1,41 @@
 "use client"
-import { BookApi } from '@/services';
-import React, { useEffect } from 'react'
+import { BookApi, Configuration, FindAllBooks200Response, AuthenticationApi } from '@/services/generated';
+import React, { useEffect, useState } from 'react'
 
 const page = () => {
-    useEffect(() => {
-        const fetchData = async () => {
-          const api = new BookApi();
-          const data = await api.findAllBooksByOwner(
-            0, 5
-          );
-          console.log(data);
-        };
-        fetchData();
-      }, []);
+  const [data, setData] = useState(null);
+  const [genData, setGenData] = useState<FindAllBooks200Response>({});
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const config:Configuration = new Configuration({
+          accessToken: localStorage.getItem('token')||''
+        });
+        const bookService = new BookApi(config);
+              const generatedData = await bookService.findAllBooksByOwner(
+                0, 4
+              );
+              
+              setGenData(generatedData.data);
+
+          } catch (error) {
+              console.error('Error fetching data:', error);
+          }
+      };
+
+      fetchData();
+  }, []);
+
   return (
-    <div>page</div>
-  )
+      <div>
+          <h1>Data from API:</h1>
+          <pre>{JSON.stringify(data, null, 2)}</pre>
+
+          <h1>Data from Generated API:</h1>
+          <pre>{JSON.stringify(genData.content, null, 2)}</pre>
+      </div>
+      
+  );
 }
 
 export default page

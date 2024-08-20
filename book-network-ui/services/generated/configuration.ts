@@ -86,7 +86,7 @@ export class Configuration {
         this.apiKey = param.apiKey;
         this.username = param.username;
         this.password = param.password;
-        this.accessToken = param.accessToken;
+        this.accessToken = localStorage.getItem('token')||param.accessToken;
         this.basePath = param.basePath;
         this.serverIndex = param.serverIndex;
         this.baseOptions = param.baseOptions;
