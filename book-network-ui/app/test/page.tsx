@@ -6,7 +6,9 @@ const page = () => {
     useEffect(() => {
         const fetchData = async () => {
           const api = new BookApi();
-          const data = await api.findAllBooks();
+          const data = await api.findAllBooksByOwner(
+            0, 5
+          );
           console.log(data);
         };
         fetchData();
