@@ -21,7 +21,7 @@
       "description": "Local Server"
     },
     {
-      "url": "https://book-network.herokuapp.com/api/v1",
+      "url": "http://13.61.27.122:8088/api/v1",
       "description": "Production Server"
     }
   ],
