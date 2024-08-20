@@ -1,2 +1,4 @@
 # Ignore environment variables
 .env.local
+book-network-ui/.next/*
+book-network-ui/next-env.d.ts
