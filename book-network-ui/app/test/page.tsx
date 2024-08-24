@@ -27,10 +27,7 @@ const page = () => {
   }, []);
 
   return (
-      <div>
-          <h1>Data from API:</h1>
-          <pre>{JSON.stringify(data, null, 2)}</pre>
-
+      <div className='w-[80%] bg-primary text-muted '>
           <h1>Data from Generated API:</h1>
           <pre>{JSON.stringify(genData.content, null, 2)}</pre>
       </div>
